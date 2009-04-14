@@ -1,6 +1,6 @@
   package Package::Subroutine
 # ***************************
-; our $VERSION = '0.15'
+; our $VERSION = '0.16_1'
 # *********************
 ; sub export
     { my $ns = (caller(1))[0]
