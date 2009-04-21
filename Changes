@@ -1,5 +1,9 @@
 Changelog of Package-Subroutine
 ###############################
+0.16_1  Thu 14 Apr 2009
+     - fixed META.yml requires section
+     - switched to development version schema, let CPANTS do its magic
+     
 0.15  Thu 14 Apr 2009
      - s/Package-Subroutine/Package::Subroutine/
 
