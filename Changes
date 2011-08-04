@@ -1,8 +1,21 @@
 Changelog of Package-Subroutine
 ###############################
+
+0.20 Do 4. Aug 23:16:50 CEST 2011
+     - released with ShipIt
+     - removed xt/critic.t - because this modul is build around bad practice
+ 
+0.19 Do 4. Aug 23:01:00 CEST 2011
+     - delete t/09*-tests in favor of a xt directory
+     - check if it works with aliased
+
+0.18 Thu 23 Jul 2009
+     - export_to method
+
 0.16_3  Wed 27 May 2009
      - check for spaces
      - undocumented export_to_caller method
+
 0.16_1  Thu 14 Apr 2009
      - fixed META.yml requires section
      - switched to development version schema, let CPANTS do its magic
