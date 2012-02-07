@@ -1,8 +1,10 @@
 package Package::Subroutine;
-# ***************************
-$VERSION = '0.20';
+# **************************
+$VERSION = '0.21';
 # ****************
 ; no strict 'refs'
+
+; use Class::ISA ()
 
 ; sub export_to_caller
     { my ($self,$level) = @_
@@ -13,6 +15,7 @@ $VERSION = '0.20';
       ; exporter($namespace,$from,@methods)
       }
     }
+
 ; sub export_to
     { my ($self,$namespace) = @_
     ; return sub
@@ -21,6 +24,7 @@ $VERSION = '0.20';
         ; exporter($namespace,$from,@methods)
         }
     }
+
 ; sub export
     { my $ns = (caller(1))[0]
     ; shift() # rm package
@@ -39,8 +43,8 @@ $VERSION = '0.20';
     { my $ns  = (caller(0))[0]
     ; my $pkg = shift()
     ; if(@_==1)
-    { push @_, $pkg->findsubs($ns)
-    }
+        { push @_, $pkg->findsubs($_[0])
+        }
     ; exporter($ns,@_)
     }
 
@@ -51,20 +55,20 @@ $VERSION = '0.20';
     ; local $_
 
     ; for ( @methods )
-    { my $srcm = my $trgm = $_
-    ; ($srcm,$trgm) = @$_ if ref eq 'ARRAY'
-    ; my $target = "${namespace}::${trgm}"
-    ; my $source = "${from}::${srcm}"
-    ; *$target = \&$source
-    }
+        { my $srcm = my $trgm = $_
+        ; ($srcm,$trgm) = @$_ if ref eq 'ARRAY'
+        ; my $target = "${namespace}::${trgm}"
+        ; my $source = "${from}::${srcm}"
+        ; *$target = \&$source
+        }
     }
 
 ; sub version
     { my ($f,$pkg,$num)=@_
     ; if( defined($num) )
-    { $num=eval { UNIVERSAL::VERSION($pkg,$num) }
-    ; return $@ ? undef : $num
-    }
+        { $num=eval { UNIVERSAL::VERSION($pkg,$num) }
+        ; return $@ ? undef : $num
+        }
     ; eval { UNIVERSAL::VERSION($pkg) }
     }
 
@@ -87,6 +91,14 @@ $VERSION = '0.20';
 ; sub findsubs
    { my ($self,$class)=@_
    ; grep { *{"${class}::${_}"}{CODE} } keys %{"${class}::"}
+   }
+
+; sub findmethods
+   { my ($self,$class)=@_
+   ; my %methods = map { $_ => 1 }
+       map { $self->findsubs($_) }
+       reverse  (Class::ISA::self_and_super_path($class),'UNIVERSAL')
+   ; return keys %methods
    }
 
 ; 1
@@ -243,6 +255,11 @@ or a pair of package name and function name.
 This method returns a list or an array with all defined functions
 for a given package.
 
+=head2 C<findmethods>
+
+Simliar to findsubs but reads all classes in C<@ISA> plus UNIVERSAL.
+L<Class::ISA> is used for the task to list all subclasses.
+
 =head1 Note
 
 I know this package does not much, what is not possible with core
@@ -268,6 +285,10 @@ readable.
 
 =item L<Exporter>
 
+=item L<Class::Inspector>
+
+The C<methods> method has much more features than findmethods.
+
 =back
 
 =head1 CONTRIBUTIONS
@@ -281,5 +302,5 @@ should happen anyway.)
 Perl has a free license, so this module shares it with this
 programming language.
 
-Copyleft 2006-2009 by Sebastian Knapp E<lt>rock@ccls-online.deE<gt>
+Copyleft 2006-2012 by Sebastian Knapp E<lt>rock@ccls-online.deE<gt>
 
